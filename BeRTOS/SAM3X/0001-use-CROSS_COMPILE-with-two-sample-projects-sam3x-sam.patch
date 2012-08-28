@@ -1,0 +1,121 @@
+From 75de79bd096c2d6b22d0c75365c4ae51f738618c Mon Sep 17 00:00:00 2001
+From: Robert Nelson <robertcnelson@gmail.com>
+Date: Mon, 27 Aug 2012 21:49:27 -0500
+Subject: [PATCH] use CROSS_COMPILE with two sample projects sam3x/sam7x
+
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ Makefile_sam3x                                      |   19 +++++++++++++++++++
+ Makefile_sam7x                                      |   19 +++++++++++++++++++
+ bertos/config.mk                                    |   10 +++++-----
+ .../at91sam7x-ek_tcp_server.mk                      |    3 ++-
+ .../sam3x-ek_tcp_server/sam3x-ek_tcp_server.mk      |    3 ++-
+ 5 files changed, 47 insertions(+), 7 deletions(-)
+ create mode 100644 Makefile_sam3x
+ create mode 100644 Makefile_sam7x
+
+diff --git a/Makefile_sam3x b/Makefile_sam3x
+new file mode 100644
+index 0000000..07c5b14
+--- /dev/null
++++ b/Makefile_sam3x
+@@ -0,0 +1,19 @@
++#
++# $Id$
++# Copyright 2002, 2003, 2004, 2006 Develer S.r.l. (http://www.develer.com/)
++# All rights reserved.
++#
++# Author: Bernie Innocenti <bernie@codewiz.org>
++#
++
++# Set to 1 for verbose build output, 0 for terse output
++V := 0
++
++default: all
++
++include bertos/config.mk
++
++#Include subtargets
++include boards/sam3x-ek/examples/sam3x-ek_tcp_server/sam3x-ek_tcp_server.mk
++
++include bertos/rules.mk
+diff --git a/Makefile_sam7x b/Makefile_sam7x
+new file mode 100644
+index 0000000..937a032
+--- /dev/null
++++ b/Makefile_sam7x
+@@ -0,0 +1,19 @@
++#
++# $Id$
++# Copyright 2002, 2003, 2004, 2006 Develer S.r.l. (http://www.develer.com/)
++# All rights reserved.
++#
++# Author: Bernie Innocenti <bernie@codewiz.org>
++#
++
++# Set to 1 for verbose build output, 0 for terse output
++V := 0
++
++default: all
++
++include bertos/config.mk
++
++#Include subtargets
++include boards/at91sam7x-ek/examples/at91sam7x-ek_tcp_server/at91sam7x-ek_tcp_server.mk
++
++include bertos/rules.mk
+diff --git a/bertos/config.mk b/bertos/config.mk
+index 1d75dc0..ab7fe1e 100644
+--- a/bertos/config.mk
++++ b/bertos/config.mk
+@@ -23,14 +23,14 @@ DEBUGCFLAGS = -ggdb
+ #
+ # define some variables based on the AVR base path in $(AVR)
+ #
+-CC      = gcc
+-CXX     = g++
+-AR      = ar
++CC      = $(CROSS_COMPILE)gcc
++CXX     = $(CROSS_COMPILE)g++
++AR      = $(CROSS_COMPILE)ar
+ AS      = $(CC) -x assembler-with-cpp
+ LD      = $(CC)
+ LDXX	= $(CXX)
+-OBJCOPY = objcopy
+-STRIP   = strip
++OBJCOPY = $(CROSS_COMPILE)objcopy
++STRIP   = $(CROSS_COMPILE)strip
+ INSTALL = cp -a
+ RM      = rm -f
+ RM_R    = rm -rf
+diff --git a/boards/at91sam7x-ek/examples/at91sam7x-ek_tcp_server/at91sam7x-ek_tcp_server.mk b/boards/at91sam7x-ek/examples/at91sam7x-ek_tcp_server/at91sam7x-ek_tcp_server.mk
+index 1a8861e..57a6885 100644
+--- a/boards/at91sam7x-ek/examples/at91sam7x-ek_tcp_server/at91sam7x-ek_tcp_server.mk
++++ b/boards/at91sam7x-ek/examples/at91sam7x-ek_tcp_server/at91sam7x-ek_tcp_server.mk
+@@ -9,7 +9,8 @@ at91sam7x-ek_tcp_server_DEBUG = 1
+ # Our target application
+ TRG += at91sam7x-ek_tcp_server
+ 
+-at91sam7x-ek_tcp_server_PREFIX = "arm-none-eabi-"
++#at91sam7x-ek_tcp_server_PREFIX = "arm-none-eabi-"
++at91sam7x-ek_tcp_server_PREFIX = ""
+ 
+ at91sam7x-ek_tcp_server_SUFFIX = ""
+ 
+diff --git a/boards/sam3x-ek/examples/sam3x-ek_tcp_server/sam3x-ek_tcp_server.mk b/boards/sam3x-ek/examples/sam3x-ek_tcp_server/sam3x-ek_tcp_server.mk
+index 4e15505..8c5edac 100644
+--- a/boards/sam3x-ek/examples/sam3x-ek_tcp_server/sam3x-ek_tcp_server.mk
++++ b/boards/sam3x-ek/examples/sam3x-ek_tcp_server/sam3x-ek_tcp_server.mk
+@@ -9,7 +9,8 @@ sam3x-ek_tcp_server_DEBUG = 1
+ # Our target application
+ TRG += sam3x-ek_tcp_server
+ 
+-sam3x-ek_tcp_server_PREFIX = "arm-none-eabi-"
++#sam3x-ek_tcp_server_PREFIX = "arm-none-eabi-"
++sam3x-ek_tcp_server_PREFIX = ""
+ 
+ sam3x-ek_tcp_server_SUFFIX = ""
+ 
+-- 
+1.7.10.4
+
