@@ -1,0 +1,83 @@
+From e5377156ef0b176f206d7f7b52ebe329e5332767 Mon Sep 17 00:00:00 2001
+From: Robert Nelson <robertcnelson@gmail.com>
+Date: Tue, 11 Sep 2012 12:47:43 -0500
+Subject: [PATCH] ECE497_Listings_for_Embedded_Linux_Primer_Chapter_8
+
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ drivers/char/Kconfig           |    7 +++++++
+ drivers/char/Makefile          |    1 +
+ drivers/char/examples/Makefile |    1 +
+ drivers/char/examples/hello.c  |   22 ++++++++++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 drivers/char/examples/Makefile
+ create mode 100644 drivers/char/examples/hello.c
+
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index 4364303..c249411 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -4,6 +4,13 @@
+ 
+ menu "Character devices"
+ 
++config EXAMPLES
++	tristate "Enable Examples"
++	default m
++	---help---
++	  Enable compilation option for Embedded Linux Primer
++	  driver examples
++
+ source "drivers/tty/Kconfig"
+ 
+ config DEVKMEM
+diff --git a/drivers/char/Makefile b/drivers/char/Makefile
+index 32762ba..59c72b0 100644
+--- a/drivers/char/Makefile
++++ b/drivers/char/Makefile
+@@ -54,6 +54,7 @@ obj-$(CONFIG_MWAVE)		+= mwave/
+ obj-$(CONFIG_AGP)		+= agp/
+ obj-$(CONFIG_PCMCIA)		+= pcmcia/
+ obj-$(CONFIG_IPMI_HANDLER)	+= ipmi/
++obj-$(CONFIG_EXAMPLES)		+= examples/
+ 
+ obj-$(CONFIG_HANGCHECK_TIMER)	+= hangcheck-timer.o
+ obj-$(CONFIG_TCG_TPM)		+= tpm/
+diff --git a/drivers/char/examples/Makefile b/drivers/char/examples/Makefile
+new file mode 100644
+index 0000000..1fba49b
+--- /dev/null
++++ b/drivers/char/examples/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_EXAMPLES)		+= hello.o
+diff --git a/drivers/char/examples/hello.c b/drivers/char/examples/hello.c
+new file mode 100644
+index 0000000..f22b7f5
+--- /dev/null
++++ b/drivers/char/examples/hello.c
+@@ -0,0 +1,22 @@
++/* Example Minimal Character Device Driver */
++/* From: http://elinux.org/ECE497_Listings_for_Embedded_Linux_Primer_Chapter_8 */
++#include <linux/module.h>
++
++static int __init hello_init(void)
++{
++    printk(KERN_INFO "Hello Example Init\n");
++
++    return 0;
++}
++
++static void __exit hello_exit(void)
++{
++    printk(KERN_INFO "Hello Example Exit\n");
++}
++
++module_init(hello_init);
++module_exit(hello_exit);
++
++MODULE_AUTHOR("Chris Hallinan");
++MODULE_DESCRIPTION("Hello World Example");
++MODULE_LICENSE("GPL");
+-- 
+1.7.10.4
+
